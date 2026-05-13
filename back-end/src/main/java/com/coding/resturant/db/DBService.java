@@ -23,14 +23,14 @@ public class DBService implements CommandLineRunner {
     public void run(String... args) throws Exception {
 /*
       User user = new User();
-      user.setEmail("elsayedabdalah4@gmail.com");
+      user.setEmail("elsayedabdalah5@gmail.com");
       user.setPassword(passwordEncoder.encode("123456789"));
       user.setActive(1);
         List<Authorities> authorities = authoritiesRepository.findAll();
-        user.getAuthorities().add(authorities.get(0));
+        user.getAuthorities().add(authorities.get(1));
 //        user.getAuthorities().add(authorities.get(1));
         userRepository.save(user);
-
 */
+
     }
 }
