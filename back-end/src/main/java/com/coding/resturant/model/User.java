@@ -22,7 +22,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
-public class User extends CategoryOrder implements UserDetails , Principal {
+public class User extends CategoryOrder implements UserDetails  {
     @Column(name = "name")
     private String name;
     @Column(name = "email")
@@ -86,8 +86,5 @@ public class User extends CategoryOrder implements UserDetails , Principal {
     public boolean isEnabled() {
         return active == 1;
     }
-//    public String fullName() {
-//        return getName();
-//    }
 
 }
