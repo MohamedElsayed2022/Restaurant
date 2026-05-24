@@ -1,21 +1,18 @@
 package com.coding.resturant.model;
 
+import com.coding.resturant.user.Token;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "user")
-public class User extends BaseEntity{
+public class User extends PublicData{
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -30,4 +27,9 @@ public class User extends BaseEntity{
 
     )
     private List<Authorities> authorities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Token> tokens = new ArrayList<>();
+
+
 }
