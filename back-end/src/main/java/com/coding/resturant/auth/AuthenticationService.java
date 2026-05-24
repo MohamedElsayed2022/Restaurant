@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,7 @@ public class AuthenticationService {
         var userRole = authoritiesRepository.findByRoleName("ROLE_USER")
                 .orElseThrow(() -> new IllegalStateException("Role User was not initialized"));
         var user = User.builder()
+                .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .active(0)
@@ -60,8 +62,8 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail());
-        String jwtToken = jwtService.generateToken((UserDetails) user);
+        UserDetails user = userRepository.findByEmail(request.getEmail());
+        String jwtToken = jwtService.generateToken(user);
         return  AuthenticationResponse.builder()
                 .token(jwtToken).build();
     }

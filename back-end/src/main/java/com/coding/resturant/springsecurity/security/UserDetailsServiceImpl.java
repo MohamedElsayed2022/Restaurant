@@ -1,6 +1,6 @@
 package com.coding.resturant.springsecurity.security;
 
-import com.coding.resturant.dto.UserPrincipal;
+import com.coding.resturant.model.User;
 import com.coding.resturant.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        return Optional.ofNullable(userRepository.findByEmail(userEmail))
-                .map(UserPrincipal::new)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found"));
-        // UserPrincipal userPrincipal = new UserPrincipal(user);
-
+        return userRepository.findByEmail(userEmail);
     }
 }
