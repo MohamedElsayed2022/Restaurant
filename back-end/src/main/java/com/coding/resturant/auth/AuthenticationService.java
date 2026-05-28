@@ -7,6 +7,7 @@ import com.coding.resturant.repository.UserRepository;
 import com.coding.resturant.springsecurity.security.JwtService;
 import com.coding.resturant.user.Token;
 import com.coding.resturant.user.TokenRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
@@ -35,6 +37,7 @@ public class AuthenticationService {
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
+
     @Transactional
     public void register(RegistrationRequest request) throws MessagingException {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -52,6 +55,7 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
+        System.out.println("REGISTER HIT");
 
     }
 
@@ -62,7 +66,8 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        UserDetails user = userRepository.findByEmail(request.getEmail());
+        UserDetails user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String jwtToken = jwtService.generateToken(user);
         return  AuthenticationResponse.builder()
                 .token(jwtToken).build();

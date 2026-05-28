@@ -22,7 +22,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "user")
-public class User extends CategoryOrder implements UserDetails  {
+public class User extends CategoryOrder implements UserDetails , Principal  {
     @Column(name = "name")
     private String name;
     @Column(name = "email")
