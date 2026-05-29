@@ -26,6 +26,12 @@ public class OrderController {
         orderService.deleteOrderById(id);
         return  "Order Deleted Successfully";
     }
+    @PutMapping( value = "order/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    public Order updateOrder( @PathVariable Long id, @ModelAttribute Order order, @RequestParam(value = "imgs", required = false)
+            List<MultipartFile> imgs
+    ) {
+        return orderService.updateOrder(id, order, imgs);
+    }
     @GetMapping("allOrders")
   public List<Order> getAllOrders(@RequestParam int page , @RequestParam int size){
         return orderService.getOrders(page , size);

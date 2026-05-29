@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class OrderService {
         List<String> fileNames = new ArrayList<>();
         for(MultipartFile img : imgs){
             String fileName = System.currentTimeMillis() + "_" + img.getOriginalFilename();
-            Path path = Paths.get("uploads/" + fileName);
+            Path path = Paths.get("uploads/orders/" + fileName);
             try {
                 Files.copy(img.getInputStream(), path);
             } catch (IOException e) {
@@ -50,7 +51,6 @@ public class OrderService {
     public Order getOrderById(Long id){
         return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
     }
-
     public long getOrdersSize() {
         return orderRepository.count();
     }
@@ -61,6 +61,42 @@ public class OrderService {
         return orderRepository.getOrderLengthByKey(Key);
     }
     public void  deleteOrderById(Long id){ orderRepository.deleteById(id); }
+    public Order updateOrder( Long id, Order newOrder, List<MultipartFile> imgs ) {
 
+        Order oldOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        oldOrder.setName(newOrder.getName());
+        oldOrder.setPrice(newOrder.getPrice());
+        oldOrder.setDescription(newOrder.getDescription());
+        oldOrder.setCategory(newOrder.getCategory());
+
+        if (imgs != null && !imgs.isEmpty()) {
+
+            List<String> fileNames = new ArrayList<>();
+
+            for (MultipartFile img : imgs) {
+
+                String fileName =
+                        System.currentTimeMillis()
+                                + "_" +
+                                img.getOriginalFilename();
+
+                Path path = Paths.get("uploads/" + fileName);
+
+                try {
+                    Files.copy(img.getInputStream(), path);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                fileNames.add(fileName);
+            }
+
+            oldOrder.setImg(fileNames);
+        }
+
+        return orderRepository.save(oldOrder);
+    }
 
 }
