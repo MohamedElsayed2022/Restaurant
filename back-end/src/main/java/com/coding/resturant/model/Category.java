@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 public class Category extends PublicData {
 
-    @Column(name = "categorylogo")
+    @Column(name = "category_logo")
     private String logo;
     @JsonIgnore
     @OneToMany(mappedBy = "category")

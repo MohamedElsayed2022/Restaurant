@@ -4,8 +4,10 @@ import com.coding.resturant.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import com.coding.resturant.service.OrderService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,6 +16,11 @@ import java.util.List;
 @RequestMapping("/api/")
 public class OrderController {
     private final OrderService orderService;
+
+    @PostMapping(value = "order" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Order createOrder(@ModelAttribute Order order , @RequestParam("file") MultipartFile file){
+        return orderService.createOrder(order , file);
+    }
     @GetMapping("allOrders")
   public List<Order> getAllOrders(@RequestParam int page , @RequestParam int size){
         return orderService.getOrders(page , size);
@@ -42,4 +49,5 @@ public class OrderController {
     public Long getLengthOrderByKey(@RequestParam String key){
         return  orderService.getOrderCountByKey(key);
     }
+
 }
