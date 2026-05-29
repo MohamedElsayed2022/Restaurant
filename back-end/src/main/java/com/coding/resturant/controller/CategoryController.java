@@ -1,6 +1,7 @@
 package com.coding.resturant.controller;
 
 import com.coding.resturant.model.Category;
+import com.coding.resturant.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,15 @@ public class CategoryController {
     @PostMapping( value = "category" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Category createCategory(@ModelAttribute Category category , @RequestParam("image") MultipartFile image) {
          return categoryService.createCategory(category , image);
+    }
+    @DeleteMapping("category/{id}")
+    public String deleteCategory(@PathVariable("id") Long id) {
+        categoryService.deleteCategory(id);
+        return "Deleted Category";
+    }
+
+    @PutMapping( value = "category/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    public Category updateCategory(@PathVariable Long id, @ModelAttribute Category category, @RequestParam(value = "image", required = false) MultipartFile image) {
+        return categoryService.updateCategory(id, category ,image );
     }
 }

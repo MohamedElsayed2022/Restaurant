@@ -35,4 +35,33 @@ public class CategoryService {
         category.setLogo(fileName);
         return categoryRepository.save(category);
     }
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
+    }
+    public Category updateCategory(Long id ,  Category category, MultipartFile image) {
+        Category oldCategory = categoryRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        oldCategory.setName(category.getName());
+//        oldCategory.setLogo(category.getLogo());
+        if (image != null && !image.isEmpty()) {
+
+                String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                Path path = Paths.get("uploads/categories/");
+            try {
+                if (!Files.exists(path)) {
+                    Files.createDirectories(path);
+                }
+                Path newPath = path.resolve(fileName);
+                Files.copy(image.getInputStream(), newPath);
+
+                // هنا نضع اسم الملف الجديد في الداتابيز بنجاح
+                oldCategory.setLogo(fileName);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            }
+        return categoryRepository.save(oldCategory);
+
+    }
 }
