@@ -12,24 +12,26 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    public Order createOrder(Order order, MultipartFile img){
-        String fileName = System.currentTimeMillis() + "_" + img.getOriginalFilename();
-
-        Path path = Paths.get("uploads/" + fileName);
-
-        try {
-            Files.copy(img.getInputStream(), path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public Order createOrder(Order order,List<MultipartFile> imgs){
+        List<String> fileNames = new ArrayList<>();
+        for(MultipartFile img : imgs){
+            String fileName = System.currentTimeMillis() + "_" + img.getOriginalFilename();
+            Path path = Paths.get("uploads/" + fileName);
+            try {
+                Files.copy(img.getInputStream(), path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            fileNames.add(fileName);
         }
-
-        order.setImg(fileName);
+        order.setImg(fileNames);
 
         return orderRepository.save(order);
     }
@@ -58,6 +60,7 @@ public class OrderService {
     public long getOrderCountByKey(String Key){
         return orderRepository.getOrderLengthByKey(Key);
     }
+    public void  deleteOrderById(Long id){ orderRepository.deleteById(id); }
 
 
 }

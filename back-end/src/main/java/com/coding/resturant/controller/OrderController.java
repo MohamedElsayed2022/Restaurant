@@ -18,8 +18,13 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping(value = "order" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Order createOrder(@ModelAttribute Order order , @RequestParam("file") MultipartFile file){
-        return orderService.createOrder(order , file);
+    public Order createOrder(@ModelAttribute Order order , @RequestParam("imgs")List<MultipartFile> imgs){
+        return orderService.createOrder(order , imgs);
+    }
+    @DeleteMapping("order")
+    public String deleteOrder(@RequestParam("id") Long id){
+        orderService.deleteOrderById(id);
+        return  "Order Deleted Successfully";
     }
     @GetMapping("allOrders")
   public List<Order> getAllOrders(@RequestParam int page , @RequestParam int size){
