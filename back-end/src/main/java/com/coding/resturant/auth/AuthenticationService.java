@@ -1,15 +1,11 @@
 package com.coding.resturant.auth;
 import com.coding.resturant.email.EmailService;
 import com.coding.resturant.email.EmailTemplateName;
-import com.coding.resturant.model.User;
-import com.coding.resturant.repository.AuthoritiesRepository;
-import com.coding.resturant.repository.UserRepository;
-import com.coding.resturant.springsecurity.security.JwtService;
-import com.coding.resturant.user.Token;
-import com.coding.resturant.user.TokenRepository;
-import jakarta.annotation.PostConstruct;
+import com.coding.resturant.user.User;
+import com.coding.resturant.user.AuthoritiesRepository;
+import com.coding.resturant.user.UserRepository;
+import com.coding.resturant.config.security.JwtService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +17,6 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
